@@ -18,6 +18,12 @@ with open("question_mapper.json", "r") as f:
 
 sent = MatchQuestion()
 print(sent.question_bank, len(sent.question_bank))
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
 @app.post("/sent-tranf")
 def sent_tranf(question: str = Form(...), file :str = Form(...)):
     
