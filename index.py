@@ -17,20 +17,18 @@ with open("question_mapper.json", "r") as f:
     question_mapper = json.load(f)
 
 sent = MatchQuestion()
-print(sent.question_bank, len(sent.question_bank))
 
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.post("/sent-tranf")
-def sent_tranf(question: str = Form(...), file :str = Form(...)):
-    
-    print(question)
+@app.post("/api")
+async def sent_tranf(question: str = Form(...), file: UploadFile = File(...)):
     match = sent.match_question(question)
-    response = globals()["ga1_q12"](match, file)
-    return match
+    file_bytes = await file.read()
+    answer = globals()[question_mapper[match]](question, file_bytes)
+    return {"answer": answer}
 
 
 # api_key = os.environ.get("api_key")
